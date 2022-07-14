@@ -1,7 +1,10 @@
 const { Schema, model } = require('mongoose');
-const assignmentSchema = require('./Reaction');
+const reactionSchema = require('./Reaction');
+const formatDate = require('../utils/date');
+
+
 // Schema to create a course model
-const courseSchema = new Schema(
+const thoughtSchema = new Schema(
   {
     courseName: {
       type: String,
@@ -11,30 +14,27 @@ const courseSchema = new Schema(
       type: Boolean,
       default: true,
     },
-    startDate: {
+    createdAt: {
       type: Date,
       default: Date.now(),
+      get: timeStamp => formatDate(timeStamp)
     },
     endDate: {
       type: Date,
       // Sets a default value of 12 weeks from now
       default: () => new Date(+new Date() + 84 * 24 * 60 * 60 * 1000),
     },
-    students: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Student',
-      },
-    ],
+    reactions: [reactionSchema],
   },
   {
     toJSON: {
+      getters: true,
       virtuals: true,
     },
     id: false,
   }
 );
 
-const Course = model('course', courseSchema);
+const Thought = model('thought', thoughtSchema);
 
-module.exports = Course;
+module.exports = Thought;
