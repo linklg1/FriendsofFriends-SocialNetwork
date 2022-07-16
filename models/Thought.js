@@ -3,26 +3,23 @@ const reactionSchema = require('./Reaction');
 const formatDate = require('../utils/date');
 
 
-// Schema to create a course model
+// Schema to create a thought model
 const thoughtSchema = new Schema(
   {
-    courseName: {
+    thoughtText: {
       type: String,
       required: true,
-    },
-    inPerson: {
-      type: Boolean,
-      default: true,
+      maxlength: 280,
+      minlength: 1
     },
     createdAt: {
       type: Date,
       default: Date.now(),
       get: timeStamp => formatDate(timeStamp)
     },
-    endDate: {
-      type: Date,
-      // Sets a default value of 12 weeks from now
-      default: () => new Date(+new Date() + 84 * 24 * 60 * 60 * 1000),
+    username: {
+      type: String,
+    required: true  
     },
     reactions: [reactionSchema],
   },
@@ -34,6 +31,9 @@ const thoughtSchema = new Schema(
     id: false,
   }
 );
+thoughtSchema.virtuals("reactionCount").get(function(){
+  return this.reactions.length;
+})
 
 const Thought = model('thought', thoughtSchema);
 
