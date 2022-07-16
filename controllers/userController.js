@@ -96,4 +96,31 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+
+   // Add friend
+   addFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: params.userId}, 
+      { $addToSet: { friends: req.params.friendId } }, 
+      { new: true, runValidators: true }
+    )
+      .then(dbUserData => res.json(dbUserData))
+      .catch((err) => res.status(400).json(err));
+},
+
+// Remove friend 
+removeFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: params.userId}, 
+      { $pull: { friends: req.params.friendId} },
+      { runValidators: true, new: true}
+    )
+    .then((user) => {
+      if (!user) {
+          return res.status(404).json({ message: 'User with this ID does not exist.' });
+      }
+      res.json(user);
+  })
+  .catch((err) => res.status(500).json(err));
+}
 };
