@@ -22,8 +22,7 @@ module.exports = {
         !user
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json({
-              user,
-              grade: await grade(req.params.userId),
+              user
             })
       )
       .catch((err) => {
@@ -37,6 +36,24 @@ module.exports = {
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
+
+// Update user 
+updateUser(req, res) {
+  User.findOneAndUpdate(
+    { _id: req.params.userId }, 
+    { $set: req.body },
+    { new: true, runValidators: true }
+  )
+      .then((dbUserData) => {
+        if (!dbUserData) {
+            return res.status(404).json({ message: 'Cannot update user' });
+        }
+        res.json(dbUserData);
+      }) 
+      .catch((err) => res.status(400).json(err)
+      );
+},
+
   // Delete a user and remove them from the thought
   deleteUser(req, res) {
     User.findOneAndRemove({ _id: req.params.userId })
