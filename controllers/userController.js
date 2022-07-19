@@ -55,7 +55,7 @@ updateUser(req, res) {
 
   // Delete a user and remove them from the thought
   deleteUser(req, res) {
-    User.findOneAndRemove({ _id: req.params.userID })
+    User.findOneAndRemove({ _id: req.params.userId })
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No user with that ID' })

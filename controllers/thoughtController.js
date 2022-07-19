@@ -106,13 +106,13 @@ removeReaction(req, res) {
 
 // Delete a thought and pull it from the user
 deleteThought(req, res) {
-  Thought.findOneAndRemove({ _id: req.params.thoughtID })
+  Thought.findOneAndRemove({ _id: req.params.thoughtId })
     .then((thought) =>
       !thought
         ? res.status(404).json({ message: 'No thought found with this ID!' })
         : User.findOneAndUpdate(
-            { thoughts: req.params.thoughtID },
-            { $pull: { thoughts: req.params.thoughtID } },
+            { thoughts: req.params.thoughtId },
+            { $pull: { thoughts: req.params.thoughtId } },
             { new: true }
           )
     )
