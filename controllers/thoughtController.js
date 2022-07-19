@@ -9,7 +9,7 @@ module.exports = {
   },
   // Get a thought
   getSingleThought(req, res) {
-    thought.findOne({ _id: req.params.thoughtId })
+    Thought.findOne({ _id: req.params.thoughtId })
       .select('-__v')
       .then((thought) =>
         !thought
@@ -52,4 +52,40 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+// Add a reaction to a user
+addReaction(req, res) {
+  console.log('You are adding a reaction');
+  console.log(req.body);
+  Thought.findOneAndUpdate(
+    { _id: req.params.thoughtId },
+    { $addToSet: { reactions: req.body } },
+    { runValidators: true, new: true }
+  )
+    .then((user) =>
+      !user
+        ? res
+            .status(404)
+            .json({ message: 'No user found with that ID :(' })
+        : res.json(user)
+    )
+    .catch((err) => res.status(500).json(err));
+},
+// Remove reaction from a user
+removeReaction(req, res) {
+  Thought.findOneAndUpdate(
+    { _id: req.params.thoughtId },
+    { $pull: { reaction: { reactionId: req.params.reactionId } } },
+    { runValidators: true, new: true }
+  )
+    .then((user) =>
+      !user
+        ? res
+            .status(404)
+            .json({ message: 'No user found with that ID :(' })
+        : res.json(user)
+    )
+    .catch((err) => res.status(500).json(err));
+},
+
 };
+
