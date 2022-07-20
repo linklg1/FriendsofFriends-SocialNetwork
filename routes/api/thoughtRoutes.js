@@ -14,10 +14,10 @@ router.route('/').get(getThoughts).post(createThought);
 
 
 
-// /api/users/:thoughtId/reactions
+// /api/thoughts/:thoughtId/reactions
 router.route('/:thoughtId/reactions').post(addReaction);
 
-// /api/users/:thoughtId/reactions/:reactionId
+// /api/thoughts/:thoughtId/reactions/:reactionId
 router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
 
 

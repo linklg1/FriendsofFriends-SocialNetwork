@@ -69,7 +69,7 @@ updateUser(req, res) {
    // Add friend
    addFriend(req, res) {
     User.findOneAndUpdate(
-      { _id: params.userId}, 
+      { _id: req.params.userId}, 
       { $push: { friends: req.params.friendId } }, 
       { new: true, runValidators: true }
     )
@@ -80,7 +80,7 @@ updateUser(req, res) {
 // Remove friend 
 removeFriend(req, res) {
     User.findOneAndUpdate(
-      { _id: params.userId}, 
+      { _id: req.params.userId}, 
       { $pull: { friends: req.params.friendId} },
       { runValidators: true, new: true}
     )
